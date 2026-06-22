@@ -1,0 +1,1120 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>泰文字母速記工具</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #20242b;
+      --muted: #637083;
+      --line: #d8dee8;
+      --paper: #fbfaf7;
+      --panel: #ffffff;
+      --accent: #0f766e;
+      --accent-2: #c2410c;
+      --accent-3: #334155;
+      --good: #15803d;
+      --bad: #b91c1c;
+      --soft: #eef6f4;
+      --warn: #fff3e6;
+      --shadow: 0 18px 42px rgba(32, 36, 43, .12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Microsoft JhengHei", "Noto Sans TC", "Segoe UI", Arial, sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, rgba(15, 118, 110, .08), rgba(255, 255, 255, 0) 280px),
+        var(--paper);
+    }
+
+    button, input, select {
+      font: inherit;
+    }
+
+    button {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--ink);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform .12s ease, border-color .12s ease, background .12s ease;
+    }
+
+    button:hover { transform: translateY(-1px); border-color: #9ba8b9; }
+    button:active { transform: translateY(0); }
+    button:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid rgba(15, 118, 110, .22);
+      outline-offset: 2px;
+    }
+
+    .app {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 22px;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: end;
+      padding: 12px 0 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 48px);
+      letter-spacing: 0;
+      line-height: 1.05;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      margin-top: 8px;
+      font-size: 15px;
+    }
+
+    .scorebar {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(86px, 1fr));
+      gap: 8px;
+      min-width: min(480px, 100%);
+    }
+
+    .stat {
+      background: rgba(255, 255, 255, .75);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+
+    .stat b {
+      display: block;
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 5px;
+      white-space: nowrap;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 8px 0 18px;
+    }
+
+    .tab {
+      padding: 10px 14px;
+      min-height: 42px;
+      font-weight: 700;
+    }
+
+    .tab.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: 350px 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .side, .stage, .library {
+      background: rgba(255, 255, 255, .86);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .side {
+      padding: 16px;
+      position: sticky;
+      top: 12px;
+    }
+
+    .stage {
+      min-height: 560px;
+      padding: 18px;
+      overflow: hidden;
+    }
+
+    .section-title {
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 800;
+      margin: 0 0 10px;
+      text-transform: uppercase;
+    }
+
+    .filters {
+      display: grid;
+      gap: 8px;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      padding: 8px 10px;
+      font-size: 13px;
+      min-height: 36px;
+    }
+
+    .chip.active {
+      background: var(--accent-3);
+      color: white;
+      border-color: var(--accent-3);
+    }
+
+    .meter {
+      height: 10px;
+      background: #e9edf3;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 12px 0 4px;
+    }
+
+    .meter span {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--accent), #65a30d);
+      transition: width .2s ease;
+    }
+
+    .side-block {
+      border-top: 1px solid var(--line);
+      margin-top: 16px;
+      padding-top: 16px;
+    }
+
+    .mini-list {
+      display: grid;
+      gap: 8px;
+      max-height: 215px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .mini-item {
+      display: grid;
+      grid-template-columns: 44px 1fr auto;
+      gap: 9px;
+      align-items: center;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 8px;
+      padding: 8px;
+    }
+
+    .mini-letter {
+      font-size: 30px;
+      line-height: 1;
+      font-family: "Leelawadee UI", "Tahoma", sans-serif;
+    }
+
+    .mini-item small {
+      color: var(--muted);
+      display: block;
+      line-height: 1.25;
+    }
+
+    .pill {
+      color: white;
+      background: var(--accent);
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .pill.mid { background: #475569; }
+    .pill.high { background: #c2410c; }
+
+    .learn-grid {
+      display: grid;
+      grid-template-columns: minmax(260px, 1fr) minmax(260px, .9fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .flashcard {
+      min-height: 430px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background:
+        linear-gradient(160deg, rgba(15, 118, 110, .08), rgba(194, 65, 12, .05)),
+        var(--panel);
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      padding: 18px;
+    }
+
+    .card-top, .card-actions, .quiz-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .big-letter {
+      display: grid;
+      place-items: center;
+      text-align: center;
+      min-height: 230px;
+      font-family: "Leelawadee UI", "Tahoma", sans-serif;
+      font-size: clamp(104px, 18vw, 190px);
+      line-height: .9;
+      color: #0f172a;
+    }
+
+    .roman {
+      font-size: 34px;
+      font-weight: 900;
+      margin: 0;
+    }
+
+    .meta {
+      color: var(--muted);
+      margin: 4px 0 0;
+      line-height: 1.45;
+    }
+
+    .primary {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+      font-weight: 800;
+    }
+
+    .danger {
+      background: #fff6f6;
+      color: var(--bad);
+      border-color: #f0c4c4;
+    }
+
+    .icon-btn {
+      width: 42px;
+      height: 42px;
+      display: inline-grid;
+      place-items: center;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .wide-btn {
+      min-height: 44px;
+      padding: 10px 14px;
+      font-weight: 800;
+    }
+
+    .fact-panel {
+      display: grid;
+      gap: 12px;
+    }
+
+    .fact {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 13px;
+      background: var(--panel);
+    }
+
+    .fact b {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .fact span, .fact p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .quiz-card {
+      display: grid;
+      gap: 16px;
+      min-height: 505px;
+      align-content: start;
+    }
+
+    .prompt {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--soft);
+      min-height: 190px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 18px;
+    }
+
+    .prompt .thai {
+      font-family: "Leelawadee UI", "Tahoma", sans-serif;
+      font-size: clamp(72px, 13vw, 150px);
+      line-height: .95;
+      display: block;
+    }
+
+    .prompt .latin {
+      font-size: clamp(42px, 7vw, 84px);
+      font-weight: 900;
+      display: block;
+    }
+
+    .answers {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .answer {
+      min-height: 74px;
+      padding: 12px;
+      text-align: left;
+      display: grid;
+      align-content: center;
+      gap: 3px;
+    }
+
+    .answer strong {
+      font-size: 24px;
+      line-height: 1.1;
+      overflow-wrap: anywhere;
+    }
+
+    .answer small {
+      color: var(--muted);
+      line-height: 1.3;
+    }
+
+    .answer.correct {
+      background: #ecfdf3;
+      border-color: #86efac;
+      color: var(--good);
+    }
+
+    .answer.wrong {
+      background: #fff1f1;
+      border-color: #f3a6a6;
+      color: var(--bad);
+    }
+
+    .feedback {
+      min-height: 48px;
+      border-radius: 8px;
+      padding: 12px;
+      background: #f7f8fb;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .memory-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .tile {
+      aspect-ratio: 1 / .78;
+      min-height: 74px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 8px;
+      font-weight: 900;
+      background: var(--panel);
+      overflow-wrap: anywhere;
+    }
+
+    .tile.thai {
+      font-family: "Leelawadee UI", "Tahoma", sans-serif;
+      font-size: 42px;
+    }
+
+    .tile.done {
+      background: #ecfdf3;
+      color: var(--good);
+      border-color: #86efac;
+    }
+
+    .library {
+      margin-top: 18px;
+      padding: 16px;
+    }
+
+    .library-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(126px, 1fr));
+      gap: 10px;
+    }
+
+    .letter-card {
+      min-height: 148px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 8px;
+      padding: 12px;
+      display: grid;
+      gap: 5px;
+      align-content: start;
+    }
+
+    .letter-card .glyph {
+      font-family: "Leelawadee UI", "Tahoma", sans-serif;
+      font-size: 52px;
+      line-height: 1;
+    }
+
+    .letter-card b {
+      font-size: 18px;
+    }
+
+    .letter-card small {
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    .tone-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--panel);
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+    }
+
+    .tone-table th, .tone-table td {
+      padding: 10px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+      line-height: 1.45;
+    }
+
+    .tone-table th {
+      background: #f1f5f9;
+      font-size: 13px;
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 940px) {
+      header, main, .learn-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .side {
+        position: static;
+      }
+
+      .scorebar {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 560px) {
+      .app { padding: 14px; }
+      .stage, .side, .library { padding: 13px; }
+      .answers, .memory-grid {
+        grid-template-columns: 1fr;
+      }
+      .tab, .chip, .wide-btn { width: 100%; }
+      .card-actions button { flex: 1; }
+      .stat span { white-space: normal; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div>
+        <h1>泰文字母速記</h1>
+        <div class="subtitle">母音、子音、拼音、聲調，一回合 60 秒。</div>
+      </div>
+      <div class="scorebar" aria-label="學習統計">
+        <div class="stat"><b id="seenStat">0</b><span>已練字卡</span></div>
+        <div class="stat"><b id="rightStat">0</b><span>答對</span></div>
+        <div class="stat"><b id="streakStat">0</b><span>連對</span></div>
+        <div class="stat"><b id="dueStat">0</b><span>待複習</span></div>
+      </div>
+    </header>
+
+    <nav class="tabs" aria-label="模式">
+      <button class="tab active" data-mode="learn">字卡</button>
+      <button class="tab" data-mode="quiz">快問快答</button>
+      <button class="tab" data-mode="memory">配對</button>
+      <button class="tab" data-mode="tones">聲調</button>
+    </nav>
+
+    <main>
+      <aside class="side">
+        <p class="section-title">今日範圍</p>
+        <div class="filters">
+          <div class="chip-row" id="groupFilters"></div>
+          <div class="chip-row" id="classFilters"></div>
+        </div>
+        <div class="meter"><span id="masteryMeter"></span></div>
+        <div class="meta" id="masteryText">熟悉度 0%</div>
+
+        <div class="side-block">
+          <p class="section-title">暖身順序</p>
+          <div class="mini-list" id="miniList"></div>
+        </div>
+
+        <div class="side-block">
+          <p class="section-title">控制</p>
+          <div class="chip-row">
+            <button class="wide-btn" id="resetBtn">重置進度</button>
+            <button class="wide-btn" id="reviewBtn">錯題優先</button>
+          </div>
+        </div>
+      </aside>
+
+      <section class="stage">
+        <section id="learnView" class="learn-grid">
+          <article class="flashcard">
+            <div class="card-top">
+              <span class="pill" id="cardGroup">子音</span>
+              <button class="icon-btn" id="speakBtn" title="播放">▶</button>
+            </div>
+            <div class="big-letter" id="cardGlyph">ก</div>
+            <div>
+              <p class="roman" id="cardRoman">k / g</p>
+              <p class="meta" id="cardMeta">中子音 · 雞</p>
+            </div>
+            <div class="card-actions">
+              <button class="wide-btn" id="prevCard">上一張</button>
+              <button class="wide-btn primary" id="knowCard">記住了</button>
+              <button class="wide-btn danger" id="hardCard">再練一次</button>
+              <button class="wide-btn" id="nextCard">下一張</button>
+            </div>
+          </article>
+
+          <div class="fact-panel">
+            <div class="fact">
+              <b>拼音</b>
+              <span id="cardSound"></span>
+            </div>
+            <div class="fact">
+              <b>記憶鉤子</b>
+              <p id="cardHook"></p>
+            </div>
+            <div class="fact">
+              <b>小練習</b>
+              <p id="cardDrill"></p>
+            </div>
+            <div class="fact">
+              <b>快速分類</b>
+              <p id="cardClass"></p>
+            </div>
+          </div>
+        </section>
+
+        <section id="quizView" class="quiz-card hidden">
+          <div class="quiz-top">
+            <p class="section-title" id="quizModeName">泰文 → 拼音</p>
+            <button class="wide-btn" id="switchQuiz">換題型</button>
+          </div>
+          <div class="prompt" id="prompt"></div>
+          <div class="answers" id="answers"></div>
+          <div class="feedback" id="feedback">選一個答案開始。</div>
+          <button class="wide-btn primary" id="nextQuiz">下一題</button>
+        </section>
+
+        <section id="memoryView" class="quiz-card hidden">
+          <div class="quiz-top">
+            <p class="section-title">拼音配對</p>
+            <button class="wide-btn" id="newMemory">重新開局</button>
+          </div>
+          <div class="memory-grid" id="memoryGrid"></div>
+          <div class="feedback" id="memoryFeedback">翻出泰文字母和它的拼音。</div>
+        </section>
+
+        <section id="tonesView" class="quiz-card hidden">
+          <div class="quiz-top">
+            <p class="section-title">聲調速查</p>
+            <button class="wide-btn" id="toneQuizBtn">練聲調</button>
+          </div>
+          <table class="tone-table">
+            <thead>
+              <tr><th>類別</th><th>代表字母</th><th>先記這句</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>中子音</td><td>ก จ ด ต บ ป อ</td><td>沒有聲調符號時多為平聲，搭配符號變化最規則。</td></tr>
+              <tr><td>高子音</td><td>ข ฉ ถ ผ ฝ ส ห</td><td>看見 h、s、f 這類清音，先警覺常屬高子音。</td></tr>
+              <tr><td>低子音</td><td>ค ง ช ท น พ ม ย ร ล ว</td><td>數量最多，很多常用字都在這一組。</td></tr>
+              <tr><td>尾音</td><td>-k -t -p -n -m -y -w</td><td>先把結尾收音聽出來，聲調和拼讀會快很多。</td></tr>
+            </tbody>
+          </table>
+          <div class="prompt" id="tonePrompt"><span class="thai">ก</span></div>
+          <div class="answers" id="toneAnswers"></div>
+          <div class="feedback" id="toneFeedback">先熟悉三類子音，再進入完整聲調規則。</div>
+        </section>
+      </section>
+    </main>
+
+    <section class="library">
+      <p class="section-title">字母庫</p>
+      <div class="library-grid" id="libraryGrid"></div>
+    </section>
+  </div>
+
+  <script>
+    const consonants = [
+      {glyph:"ก", roman:"k / g", name:"ko kai", zh:"雞", group:"consonant", klass:"mid", final:"-k", hook:"像雞頭伸出小嘴，記 ko kai。"},
+      {glyph:"ข", roman:"kh", name:"kho khai", zh:"蛋", group:"consonant", klass:"high", final:"-k", hook:"開口吐氣的 kh，蛋殼裂開。"},
+      {glyph:"ฃ", roman:"kh", name:"kho khuat", zh:"瓶", group:"consonant", klass:"high", final:"-k", rare:true, hook:"古字，先認得即可。"},
+      {glyph:"ค", roman:"kh", name:"kho khwai", zh:"水牛", group:"consonant", klass:"low", final:"-k", hook:"同樣 kh，但低子音，常用。"},
+      {glyph:"ฅ", roman:"kh", name:"kho khon", zh:"人", group:"consonant", klass:"low", final:"-k", rare:true, hook:"古字，和 ค 一起記。"},
+      {glyph:"ฆ", roman:"kh", name:"kho rakhang", zh:"鐘", group:"consonant", klass:"low", final:"-k", hook:"鐘聲低沉，低子音 kh。"},
+      {glyph:"ง", roman:"ng", name:"ngo ngu", zh:"蛇", group:"consonant", klass:"low", final:"-ng", hook:"像蛇彎起來，ng 從鼻腔出聲。"},
+      {glyph:"จ", roman:"c / j", name:"co can", zh:"盤", group:"consonant", klass:"mid", final:"-t", hook:"中子音，發接近 j/ch 的不送氣音。"},
+      {glyph:"ฉ", roman:"ch", name:"cho ching", zh:"鈸", group:"consonant", klass:"high", final:"-", hook:"高子音 ch，聲音清亮。"},
+      {glyph:"ช", roman:"ch", name:"cho chang", zh:"象", group:"consonant", klass:"low", final:"-t", hook:"大象常見字，低子音 ch。"},
+      {glyph:"ซ", roman:"s", name:"so so", zh:"鏈", group:"consonant", klass:"low", final:"-t", hook:"像鏈子彎曲，低子音 s。"},
+      {glyph:"ฌ", roman:"ch", name:"cho choe", zh:"樹", group:"consonant", klass:"low", final:"-t", hook:"少見 ch，放在低子音區。"},
+      {glyph:"ญ", roman:"y", name:"yo ying", zh:"女人", group:"consonant", klass:"low", final:"-n", hook:"外形複雜但常見，初音 y、尾音 n。"},
+      {glyph:"ฎ", roman:"d", name:"do chada", zh:"冠", group:"consonant", klass:"mid", final:"-t", hook:"中子音 d，尾音收成 t。"},
+      {glyph:"ฏ", roman:"t", name:"to patak", zh:"矛", group:"consonant", klass:"mid", final:"-t", hook:"中子音 t，短促收尾。"},
+      {glyph:"ฐ", roman:"th", name:"tho than", zh:"底座", group:"consonant", klass:"high", final:"-t", hook:"送氣 th，高子音。"},
+      {glyph:"ฑ", roman:"th / d", name:"tho montho", zh:"Montho", group:"consonant", klass:"low", final:"-t", hook:"低子音，常見讀 th。"},
+      {glyph:"ฒ", roman:"th", name:"tho phuthao", zh:"老人", group:"consonant", klass:"low", final:"-t", hook:"低子音 th，字形較少見。"},
+      {glyph:"ณ", roman:"n", name:"no nen", zh:"沙彌", group:"consonant", klass:"low", final:"-n", hook:"看見尾巴，記成 n。"},
+      {glyph:"ด", roman:"d", name:"do dek", zh:"小孩", group:"consonant", klass:"mid", final:"-t", hook:"常用中子音 d。"},
+      {glyph:"ต", roman:"t", name:"to tao", zh:"龜", group:"consonant", klass:"mid", final:"-t", hook:"不送氣 t，別讀成 th。"},
+      {glyph:"ถ", roman:"th", name:"tho thung", zh:"袋", group:"consonant", klass:"high", final:"-t", hook:"袋口吐氣，th。"},
+      {glyph:"ท", roman:"th", name:"tho thahan", zh:"士兵", group:"consonant", klass:"low", final:"-t", hook:"常用低子音 th。"},
+      {glyph:"ธ", roman:"th", name:"tho thong", zh:"旗", group:"consonant", klass:"low", final:"-t", hook:"旗子飄起，送氣 th。"},
+      {glyph:"น", roman:"n", name:"no nu", zh:"老鼠", group:"consonant", klass:"low", final:"-n", hook:"最常用 n 之一。"},
+      {glyph:"บ", roman:"b", name:"bo baimai", zh:"葉子", group:"consonant", klass:"mid", final:"-p", hook:"中子音 b，尾音收 p。"},
+      {glyph:"ป", roman:"p", name:"po pla", zh:"魚", group:"consonant", klass:"mid", final:"-p", hook:"不送氣 p，像中文 b/p 中間。"},
+      {glyph:"ผ", roman:"ph", name:"pho phueng", zh:"蜜蜂", group:"consonant", klass:"high", final:"-", hook:"送氣 ph，不是 f。"},
+      {glyph:"ฝ", roman:"f", name:"fo fa", zh:"蓋子", group:"consonant", klass:"high", final:"-", hook:"高子音 f。"},
+      {glyph:"พ", roman:"ph", name:"pho phan", zh:"盤", group:"consonant", klass:"low", final:"-p", hook:"低子音 ph，常用。"},
+      {glyph:"ฟ", roman:"f", name:"fo fan", zh:"牙", group:"consonant", klass:"low", final:"-p", hook:"低子音 f，牙齒咬唇。"},
+      {glyph:"ภ", roman:"ph", name:"pho samphao", zh:"帆船", group:"consonant", klass:"low", final:"-p", hook:"帆船吹風，ph。"},
+      {glyph:"ม", roman:"m", name:"mo ma", zh:"馬", group:"consonant", klass:"low", final:"-m", hook:"像馬頭，m 用嘴唇閉合。"},
+      {glyph:"ย", roman:"y", name:"yo yak", zh:"巨人", group:"consonant", klass:"low", final:"-y", hook:"常用 y，尾音也可收 y。"},
+      {glyph:"ร", roman:"r", name:"ro ruea", zh:"船", group:"consonant", klass:"low", final:"-n", hook:"泰語 r 常捲舌或輕顫。"},
+      {glyph:"ล", roman:"l", name:"lo ling", zh:"猴", group:"consonant", klass:"low", final:"-n", hook:"初音 l，尾音常歸 n。"},
+      {glyph:"ว", roman:"w", name:"wo waen", zh:"戒指", group:"consonant", klass:"low", final:"-w", hook:"像戒指彎，w 也常和母音組合。"},
+      {glyph:"ศ", roman:"s", name:"so sala", zh:"亭", group:"consonant", klass:"high", final:"-t", hook:"高子音 s，書面常見。"},
+      {glyph:"ษ", roman:"s", name:"so ruesi", zh:"隱士", group:"consonant", klass:"high", final:"-t", hook:"高子音 s，常在梵巴字源詞。"},
+      {glyph:"ส", roman:"s", name:"so suea", zh:"虎", group:"consonant", klass:"high", final:"-t", hook:"最常見高子音 s。"},
+      {glyph:"ห", roman:"h", name:"ho hip", zh:"箱", group:"consonant", klass:"high", final:"-", hook:"高子音 h，也會影響後面低子音聲調。"},
+      {glyph:"ฬ", roman:"l", name:"lo chula", zh:"風箏", group:"consonant", klass:"low", final:"-n", hook:"少見 l，名字裡有 Chula。"},
+      {glyph:"อ", roman:"ʔ / vowel carrier", name:"o ang", zh:"盆", group:"consonant", klass:"mid", final:"-", hook:"中子音，也常當母音承載字。"},
+      {glyph:"ฮ", roman:"h", name:"ho nokhuk", zh:"貓頭鷹", group:"consonant", klass:"low", final:"-", hook:"低子音 h。"}
+    ];
+
+    const vowels = [
+      {glyph:"อะ", roman:"a", name:"短 a", zh:"短母音", group:"vowel", klass:"vowel", hook:"短促 a，像 ka 的 a。"},
+      {glyph:"อา", roman:"aa", name:"長 aa", zh:"長母音", group:"vowel", klass:"vowel", hook:"拉長成 aa。"},
+      {glyph:"อิ", roman:"i", name:"短 i", zh:"短母音", group:"vowel", klass:"vowel", hook:"小短音 i。"},
+      {glyph:"อี", roman:"ii", name:"長 ii", zh:"長母音", group:"vowel", klass:"vowel", hook:"長 ii。"},
+      {glyph:"อึ", roman:"ue", name:"短 ue", zh:"短母音", group:"vowel", klass:"vowel", hook:"嘴型小、舌位高。"},
+      {glyph:"อือ", roman:"uee", name:"長 uee", zh:"長母音", group:"vowel", klass:"vowel", hook:"把 ue 拉長。"},
+      {glyph:"อุ", roman:"u", name:"短 u", zh:"短母音", group:"vowel", klass:"vowel", hook:"短 u。"},
+      {glyph:"อู", roman:"uu", name:"長 uu", zh:"長母音", group:"vowel", klass:"vowel", hook:"長 uu。"},
+      {glyph:"เอะ", roman:"e", name:"短 e", zh:"短母音", group:"vowel", klass:"vowel", hook:"短 e。"},
+      {glyph:"เอ", roman:"ee", name:"長 ee", zh:"長母音", group:"vowel", klass:"vowel", hook:"長 ee。"},
+      {glyph:"แอะ", roman:"ae", name:"短 ae", zh:"短母音", group:"vowel", klass:"vowel", hook:"嘴打開的 ae。"},
+      {glyph:"แอ", roman:"aae", name:"長 ae", zh:"長母音", group:"vowel", klass:"vowel", hook:"ae 拉長。"},
+      {glyph:"โอะ", roman:"o", name:"短 o", zh:"短母音", group:"vowel", klass:"vowel", hook:"短 o。"},
+      {glyph:"โอ", roman:"oo", name:"長 oo", zh:"長母音", group:"vowel", klass:"vowel", hook:"長 oo。"},
+      {glyph:"เอาะ", roman:"aw", name:"短 aw", zh:"短母音", group:"vowel", klass:"vowel", hook:"圓唇 aw。"},
+      {glyph:"ออ", roman:"aaw", name:"長 aw", zh:"長母音", group:"vowel", klass:"vowel", hook:"aw 拉長。"},
+      {glyph:"เอีย", roman:"ia", name:"ia", zh:"複合母音", group:"vowel", klass:"vowel", hook:"i 滑到 a。"},
+      {glyph:"เอือ", roman:"uea", name:"uea", zh:"複合母音", group:"vowel", klass:"vowel", hook:"ue 滑到 a。"},
+      {glyph:"อัว", roman:"ua", name:"ua", zh:"複合母音", group:"vowel", klass:"vowel", hook:"u 滑到 a。"},
+      {glyph:"อำ", roman:"am", name:"am", zh:"特殊母音", group:"vowel", klass:"vowel", hook:"a 加鼻音 m。"},
+      {glyph:"ไอ / ใอ", roman:"ai", name:"ai", zh:"特殊母音", group:"vowel", klass:"vowel", hook:"像 ai，一次記兩個字形。"},
+      {glyph:"เอา", roman:"ao", name:"ao", zh:"特殊母音", group:"vowel", klass:"vowel", hook:"a 滑向 o。"}
+    ];
+
+    const blends = [
+      {glyph:"กร", roman:"kr-", name:"กรอบ", zh:"框", group:"blend", klass:"blend", hook:"ก + ร，先 k 後 r。"},
+      {glyph:"กล", roman:"kl-", name:"กล้วย", zh:"香蕉", group:"blend", klass:"blend", hook:"ก + ล，k 後接 l。"},
+      {glyph:"กว", roman:"kw-", name:"กว่า", zh:"比...更", group:"blend", klass:"blend", hook:"ก + ว，k 後接 w。"},
+      {glyph:"คร", roman:"khr-", name:"ครู", zh:"老師", group:"blend", klass:"blend", hook:"ค/ข + ร，送氣 khr。"},
+      {glyph:"คล", roman:"khl-", name:"คลอง", zh:"運河", group:"blend", klass:"blend", hook:"ค/ข + ล，送氣 khl。"},
+      {glyph:"คว", roman:"khw-", name:"ขวา", zh:"右", group:"blend", klass:"blend", hook:"ค/ข + ว，送氣 khw。"},
+      {glyph:"ตร", roman:"tr-", name:"เตรียม", zh:"準備", group:"blend", klass:"blend", hook:"ต + ร，tr。"},
+      {glyph:"ปร", roman:"pr-", name:"โปรด", zh:"請", group:"blend", klass:"blend", hook:"ป + ร，pr。"},
+      {glyph:"ปล", roman:"pl-", name:"ปลา", zh:"魚", group:"blend", klass:"blend", hook:"ป + ล，pl。"},
+      {glyph:"พร", roman:"phr-", name:"พร้อม", zh:"準備好", group:"blend", klass:"blend", hook:"พ + ร，phr。"},
+      {glyph:"พล", roman:"phl-", name:"เพลง", zh:"歌", group:"blend", klass:"blend", hook:"พ + ล，phl。"}
+    ];
+
+    const finals = [
+      {glyph:"-ก", roman:"-k", name:"รัก", zh:"愛", group:"final", klass:"final", hook:"k 收尾，嘴後方卡住。"},
+      {glyph:"-ด / -ต", roman:"-t", name:"รัฐ", zh:"國家", group:"final", klass:"final", hook:"t 收尾，短促停住。"},
+      {glyph:"-บ / -ป", roman:"-p", name:"รับ", zh:"接收", group:"final", klass:"final", hook:"p 收尾，嘴唇閉合。"},
+      {glyph:"-น", roman:"-n", name:"เย็น", zh:"冷", group:"final", klass:"final", hook:"n 收尾，舌尖抵住。"},
+      {glyph:"-ง", roman:"-ng", name:"นั่ง", zh:"坐", group:"final", klass:"final", hook:"ng 收尾，鼻腔音。"},
+      {glyph:"-ม", roman:"-m", name:"ยืม", zh:"借", group:"final", klass:"final", hook:"m 收尾，嘴唇閉合帶鼻音。"},
+      {glyph:"-ย", roman:"-y", name:"สาย", zh:"晚", group:"final", klass:"final", hook:"y 收尾，舌位抬高。"},
+      {glyph:"-ว", roman:"-w", name:"ข้าว", zh:"米飯", group:"final", klass:"final", hook:"w 收尾，嘴唇收圓。"}
+    ];
+
+    const data = [...consonants, ...vowels, ...blends, ...finals].map((item, index) => ({
+      ...item,
+      id: `${item.group}-${index}`,
+      displayGroup: ({consonant:"子音", vowel:"母音", blend:"複合子音", final:"尾音"})[item.group],
+      classLabel: ({mid:"中子音", high:"高子音", low:"低子音", vowel:"母音", blend:"複合", final:"尾音"})[item.klass] || item.klass
+    }));
+
+    const state = {
+      group: "consonant",
+      klass: "all",
+      mode: "learn",
+      index: 0,
+      quizType: 0,
+      currentQuiz: null,
+      locked: false,
+      memoryFirst: null,
+      memorySolved: 0,
+      reviewOnly: false,
+      progress: JSON.parse(localStorage.getItem("thaiLetterProgress") || "{}"),
+      stats: JSON.parse(localStorage.getItem("thaiLetterStats") || '{"seen":0,"right":0,"streak":0}')
+    };
+
+    const groups = [
+      ["consonant", "子音"],
+      ["vowel", "母音"],
+      ["blend", "複合"],
+      ["final", "尾音"]
+    ];
+    const classes = [
+      ["all", "全部"],
+      ["mid", "中"],
+      ["high", "高"],
+      ["low", "低"]
+    ];
+
+    const $ = (id) => document.getElementById(id);
+    const sample = (arr) => arr[Math.floor(Math.random() * arr.length)];
+    const shuffle = (arr) => arr.map(v => [Math.random(), v]).sort((a, b) => a[0] - b[0]).map(v => v[1]);
+
+    function save() {
+      localStorage.setItem("thaiLetterProgress", JSON.stringify(state.progress));
+      localStorage.setItem("thaiLetterStats", JSON.stringify(state.stats));
+    }
+
+    function filtered() {
+      let items = data.filter(item => item.group === state.group);
+      if (state.klass !== "all") items = items.filter(item => item.klass === state.klass);
+      if (state.reviewOnly) {
+        const hard = items.filter(item => (state.progress[item.id]?.wrong || 0) > (state.progress[item.id]?.right || 0));
+        if (hard.length) items = hard;
+      }
+      return items.length ? items : data.filter(item => item.group === state.group);
+    }
+
+    function dueCount() {
+      return data.filter(item => (state.progress[item.id]?.wrong || 0) > (state.progress[item.id]?.right || 0)).length;
+    }
+
+    function mark(item, correct) {
+      const p = state.progress[item.id] || { seen: 0, right: 0, wrong: 0 };
+      p.seen += 1;
+      if (correct) p.right += 1; else p.wrong += 1;
+      state.progress[item.id] = p;
+      state.stats.seen += 1;
+      if (correct) {
+        state.stats.right += 1;
+        state.stats.streak += 1;
+      } else {
+        state.stats.streak = 0;
+      }
+      save();
+      renderStats();
+    }
+
+    function renderStats() {
+      $("seenStat").textContent = state.stats.seen;
+      $("rightStat").textContent = state.stats.right;
+      $("streakStat").textContent = state.stats.streak;
+      $("dueStat").textContent = dueCount();
+      const scoped = filtered();
+      const learned = scoped.filter(item => (state.progress[item.id]?.right || 0) >= 2).length;
+      const pct = scoped.length ? Math.round(learned / scoped.length * 100) : 0;
+      $("masteryMeter").style.width = `${pct}%`;
+      $("masteryText").textContent = `熟悉度 ${pct}%`;
+    }
+
+    function classPill(klass) {
+      if (klass === "high") return "pill high";
+      if (klass === "mid") return "pill mid";
+      return "pill";
+    }
+
+    function renderFilters() {
+      $("groupFilters").innerHTML = groups.map(([key, label]) =>
+        `<button class="chip ${state.group === key ? "active" : ""}" data-group="${key}">${label}</button>`
+      ).join("");
+      $("classFilters").innerHTML = classes.map(([key, label]) =>
+        `<button class="chip ${state.klass === key ? "active" : ""}" data-class="${key}">${label}</button>`
+      ).join("");
+      document.querySelectorAll("[data-group]").forEach(btn => btn.addEventListener("click", () => {
+        state.group = btn.dataset.group;
+        state.klass = "all";
+        state.index = 0;
+        rerender();
+      }));
+      document.querySelectorAll("[data-class]").forEach(btn => btn.addEventListener("click", () => {
+        state.klass = btn.dataset.class;
+        state.index = 0;
+        rerender();
+      }));
+    }
+
+    function currentItem() {
+      const items = filtered();
+      state.index = (state.index + items.length) % items.length;
+      return items[state.index];
+    }
+
+    function renderCard() {
+      const item = currentItem();
+      $("cardGroup").textContent = item.displayGroup;
+      $("cardGroup").className = classPill(item.klass);
+      $("cardGlyph").textContent = item.glyph;
+      $("cardRoman").textContent = item.roman;
+      $("cardMeta").textContent = `${item.classLabel} · ${item.name} · ${item.zh}`;
+      $("cardSound").textContent = item.final && item.group === "consonant" ? `初音 ${item.roman}，尾音 ${item.final}` : item.roman;
+      $("cardHook").textContent = item.hook;
+      $("cardDrill").textContent = drillFor(item);
+      $("cardClass").textContent = item.rare ? `${item.classLabel}，少用字，先認字形。` : `${item.classLabel}，在目前範圍中排行第 ${state.index + 1}。`;
+    }
+
+    function drillFor(item) {
+      if (item.group === "consonant") return `看到 ${item.glyph}，先喊 ${item.roman}，再說 ${item.classLabel}。`;
+      if (item.group === "vowel") return `把 ก 接上 ${item.glyph}，唸出 ${item.roman} 的感覺。`;
+      if (item.group === "blend") return `拆成兩個子音：${item.glyph.split("").join(" + ")}。`;
+      return `用嘴型收在 ${item.roman}，不要加出新的母音。`;
+    }
+
+    function renderMiniList() {
+      $("miniList").innerHTML = filtered().slice(0, 18).map(item => `
+        <div class="mini-item">
+          <div class="mini-letter">${item.glyph}</div>
+          <div><b>${item.roman}</b><small>${item.name} · ${item.zh}</small></div>
+          <span class="${classPill(item.klass)}">${item.classLabel}</span>
+        </div>
+      `).join("");
+    }
+
+    function renderLibrary() {
+      $("libraryGrid").innerHTML = filtered().map(item => `
+        <button class="letter-card" data-jump="${item.id}">
+          <span class="glyph">${item.glyph}</span>
+          <b>${item.roman}</b>
+          <small>${item.classLabel} · ${item.name}</small>
+          <small>${item.zh}</small>
+        </button>
+      `).join("");
+      document.querySelectorAll("[data-jump]").forEach(btn => btn.addEventListener("click", () => {
+        const items = filtered();
+        const found = items.findIndex(item => item.id === btn.dataset.jump);
+        if (found >= 0) {
+          state.index = found;
+          setMode("learn");
+          renderCard();
+        }
+      }));
+    }
+
+    function speak(item = currentItem()) {
+      if (!("speechSynthesis" in window)) return;
+      speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(item.glyph);
+      utter.lang = "th-TH";
+      utter.rate = .8;
+      speechSynthesis.speak(utter);
+    }
+
+    function makeQuiz() {
+      state.locked = false;
+      const items = filtered().filter(item => !item.rare);
+      const pool = items.length >= 4 ? items : data.filter(item => item.group === state.group && !item.rare);
+      const answer = sample(pool);
+      state.currentQuiz = answer;
+      const types = [
+        {name:"泰文 → 拼音", prompt:"thai", answer:"roman", detail:"classLabel"},
+        {name:"拼音 → 泰文", prompt:"roman", answer:"glyph", detail:"name"},
+        {name:"泰文 → 分類", prompt:"thai", answer:"classLabel", detail:"roman"}
+      ];
+      const type = types[state.quizType % types.length];
+      $("quizModeName").textContent = type.name;
+      $("prompt").innerHTML = type.prompt === "thai"
+        ? `<span class="thai">${answer.glyph}</span>`
+        : `<span class="latin">${answer.roman}</span><span class="meta">${answer.displayGroup}</span>`;
+      const distractors = shuffle(pool.filter(item => item.id !== answer.id)).slice(0, 3);
+      const choices = shuffle([answer, ...distractors]);
+      $("answers").innerHTML = choices.map(item => `
+        <button class="answer" data-answer="${item.id}">
+          <strong>${item[type.answer]}</strong>
+          <small>${item[type.detail]} · ${item.zh}</small>
+        </button>
+      `).join("");
+      $("feedback").textContent = "選一個答案。";
+      document.querySelectorAll("[data-answer]").forEach(btn => btn.addEventListener("click", () => checkQuiz(btn, type)));
+    }
+
+    function checkQuiz(btn, type) {
+      if (state.locked) return;
+      state.locked = true;
+      const chosen = data.find(item => item.id === btn.dataset.answer);
+      const correct = chosen.id === state.currentQuiz.id;
+      btn.classList.add(correct ? "correct" : "wrong");
+      document.querySelectorAll("[data-answer]").forEach(el => {
+        if (el.dataset.answer === state.currentQuiz.id) el.classList.add("correct");
+      });
+      mark(state.currentQuiz, correct);
+      $("feedback").textContent = correct
+        ? `答對：${state.currentQuiz.glyph} = ${state.currentQuiz.roman}。`
+        : `正解是 ${state.currentQuiz.glyph} = ${state.currentQuiz.roman}，${state.currentQuiz.classLabel}。`;
+    }
+
+    function makeMemory() {
+      state.memoryFirst = null;
+      state.memorySolved = 0;
+      const items = shuffle(filtered().filter(item => !item.rare)).slice(0, 6);
+      const tiles = shuffle(items.flatMap(item => [
+        {id: item.id, kind: "glyph", text: item.glyph},
+        {id: item.id, kind: "roman", text: item.roman}
+      ]));
+      $("memoryGrid").innerHTML = tiles.map((tile, idx) => `
+        <button class="tile ${tile.kind === "glyph" ? "thai" : ""}" data-tile="${idx}" data-id="${tile.id}" data-kind="${tile.kind}">${tile.text}</button>
+      `).join("");
+      $("memoryFeedback").textContent = "翻出泰文字母和它的拼音。";
+      document.querySelectorAll("[data-tile]").forEach(btn => btn.addEventListener("click", () => flipTile(btn)));
+    }
+
+    function flipTile(btn) {
+      if (btn.classList.contains("done") || btn.classList.contains("active")) return;
+      btn.classList.add("active");
+      btn.style.background = "var(--warn)";
+      if (!state.memoryFirst) {
+        state.memoryFirst = btn;
+        return;
+      }
+      const first = state.memoryFirst;
+      state.memoryFirst = null;
+      const match = first.dataset.id === btn.dataset.id && first.dataset.kind !== btn.dataset.kind;
+      const item = data.find(x => x.id === btn.dataset.id);
+      if (match) {
+        first.classList.add("done");
+        btn.classList.add("done");
+        first.style.background = "";
+        btn.style.background = "";
+        mark(item, true);
+        state.memorySolved += 1;
+        $("memoryFeedback").textContent = `配對成功：${item.glyph} = ${item.roman}`;
+        if (state.memorySolved >= 6) $("memoryFeedback").textContent = "完成一局，這組已經熱身完畢。";
+      } else {
+        mark(item, false);
+        $("memoryFeedback").textContent = "不對，再看一次位置。";
+        setTimeout(() => {
+          first.classList.remove("active");
+          btn.classList.remove("active");
+          first.style.background = "";
+          btn.style.background = "";
+        }, 650);
+      }
+    }
+
+    function makeToneQuiz() {
+      const items = consonants.filter(item => !item.rare);
+      const answer = sample(items);
+      $("tonePrompt").innerHTML = `<span class="thai">${answer.glyph}</span><span class="meta">${answer.name} · ${answer.roman}</span>`;
+      const opts = ["mid", "high", "low"];
+      $("toneAnswers").innerHTML = opts.map(key => `
+        <button class="answer" data-tone="${key}">
+          <strong>${({mid:"中子音", high:"高子音", low:"低子音"})[key]}</strong>
+          <small>${key === "mid" ? "ก จ ด ต บ ป อ" : key === "high" ? "ข ฉ ถ ผ ฝ ส ห" : "ค ง ช ท น พ ม ย ร ล ว"}</small>
+        </button>
+      `).join("");
+      document.querySelectorAll("[data-tone]").forEach(btn => btn.addEventListener("click", () => {
+        const correct = btn.dataset.tone === answer.klass;
+        btn.classList.add(correct ? "correct" : "wrong");
+        document.querySelectorAll("[data-tone]").forEach(el => {
+          if (el.dataset.tone === answer.klass) el.classList.add("correct");
+        });
+        mark(answer, correct);
+        $("toneFeedback").textContent = correct ? `答對：${answer.glyph} 是 ${answer.classLabel}。` : `${answer.glyph} 是 ${answer.classLabel}。`;
+      }, {once:true}));
+    }
+
+    function setMode(mode) {
+      state.mode = mode;
+      document.querySelectorAll(".tab").forEach(tab => tab.classList.toggle("active", tab.dataset.mode === mode));
+      ["learn", "quiz", "memory", "tones"].forEach(name => {
+        $(`${name}View`).classList.toggle("hidden", name !== mode);
+      });
+      if (mode === "quiz") makeQuiz();
+      if (mode === "memory") makeMemory();
+      if (mode === "tones") makeToneQuiz();
+    }
+
+    function rerender() {
+      renderFilters();
+      renderCard();
+      renderMiniList();
+      renderLibrary();
+      renderStats();
+      if (state.mode === "quiz") makeQuiz();
+      if (state.mode === "memory") makeMemory();
+      if (state.mode === "tones") makeToneQuiz();
+    }
+
+    document.querySelectorAll(".tab").forEach(tab => tab.addEventListener("click", () => setMode(tab.dataset.mode)));
+    $("prevCard").addEventListener("click", () => { state.index -= 1; renderCard(); });
+    $("nextCard").addEventListener("click", () => { state.index += 1; renderCard(); });
+    $("knowCard").addEventListener("click", () => { mark(currentItem(), true); state.index += 1; renderCard(); });
+    $("hardCard").addEventListener("click", () => { mark(currentItem(), false); renderCard(); });
+    $("speakBtn").addEventListener("click", () => speak());
+    $("nextQuiz").addEventListener("click", makeQuiz);
+    $("switchQuiz").addEventListener("click", () => { state.quizType += 1; makeQuiz(); });
+    $("newMemory").addEventListener("click", makeMemory);
+    $("toneQuizBtn").addEventListener("click", makeToneQuiz);
+    $("resetBtn").addEventListener("click", () => {
+      if (!confirm("清空目前進度？")) return;
+      state.progress = {};
+      state.stats = {seen:0, right:0, streak:0};
+      save();
+      rerender();
+    });
+    $("reviewBtn").addEventListener("click", () => {
+      state.reviewOnly = !state.reviewOnly;
+      $("reviewBtn").classList.toggle("primary", state.reviewOnly);
+      state.index = 0;
+      rerender();
+    });
+
+    rerender();
+  </script>
+</body>
+</html>
